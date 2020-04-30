@@ -7,6 +7,7 @@ const {
   frontPage,
   errorPage,
   searchResults,
+  pokemonCard,
 } = require("./helpers/html");
 
 const port = process.env.PORT;
@@ -28,6 +29,8 @@ const pokedex = require("./pokedex.json");
   - debe cargar las imagenes de cada pokemon en la ficha de pokemon que hay en ./static/images
   - las páginas deben cargar el css que hay en ./static/css 
 */
+
+app.use(express.static(path.resolve(__dirname, "static")));
 
 // --------
 // Esta página muestra la portada con su formulario
@@ -75,6 +78,15 @@ app.get("/pokemon/:id", (req, res) => {
     error.code = 404;
     throw error;
   }
+
+  const pageContent = pokemonCard({ pokemon });
+
+  res.send(
+    pageLayout({
+      title: `${pokemon.name.english} / ${pokemon.name.japanese}`,
+      content: pageContent,
+    })
+  );
 });
 
 // --------
