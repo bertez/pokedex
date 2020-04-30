@@ -37,8 +37,6 @@ function frontPage() {
 }
 
 function searchResults(results) {
-  if (results.length === 0) return errorPage("No results");
-
   const htmlResults = results.map((result) => {
     const { english, japanese } = result.name;
 

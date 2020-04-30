@@ -48,6 +48,12 @@ app.get("/search", (req, res) => {
     return pokemon.name.english.toLowerCase().includes(query.toLowerCase());
   });
 
+  if (matchedPokemon.length === 0) {
+    const error = new Error("Ningún pokémon encontrado");
+    error.code = 404;
+    throw error;
+  }
+
   const pageContent = searchResults(matchedPokemon);
   res
     .status(200)
