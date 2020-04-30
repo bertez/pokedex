@@ -1,4 +1,4 @@
-function pageLayout(title, content) {
+function pageLayout({ title, content }) {
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -36,7 +36,7 @@ function frontPage() {
   `;
 }
 
-function searchResults(results) {
+function searchResults({ results }) {
   const htmlResults = results.map((result) => {
     const { english, japanese } = result.name;
 
@@ -57,7 +57,7 @@ function searchResults(results) {
   `;
 }
 
-function errorPage(message) {
+function errorPage({ message }) {
   return `
     <section class="error">
       <p>${message}</p>

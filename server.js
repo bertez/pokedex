@@ -34,7 +34,7 @@ const pokedex = require("./pokedex.json");
 app.get("/", (req, res) => {
   const pageContent = frontPage();
 
-  res.status(200).send(pageLayout("Portada", pageContent));
+  res.send(pageLayout({ title: "Portada", content: pageContent }));
 });
 
 // --------
@@ -54,10 +54,13 @@ app.get("/search", (req, res) => {
     throw error;
   }
 
-  const pageContent = searchResults(matchedPokemon);
-  res
-    .status(200)
-    .send(pageLayout(`Resultados de la búsqueda: ${query}`, pageContent));
+  const pageContent = searchResults({ results: matchedPokemon });
+  res.send(
+    pageLayout({
+      title: `Resultados de la búsqueda: ${query}`,
+      content: pageContent,
+    })
+  );
 });
 
 // --------
@@ -77,19 +80,25 @@ app.get("/pokemon/:id", (req, res) => {
 // --------
 // Error middleware, sólo se va a ejecutar si hacemos un throw en las rutas anteriores
 app.use((error, req, res, next) => {
-  const pageContent = errorPage(error.message);
+  const pageContent = errorPage({ message: error.message });
 
   res
     .status(error.code || 500)
-    .send(pageLayout(`Error: ${error.message}`, pageContent));
+    .send(
+      pageLayout({ title: `Error: ${error.message}`, content: pageContent })
+    );
 });
 
 // --------
 // Not found middleware, sólo llega aquí si la url solicitada no entra en ninguna ruta
 app.use((req, res) => {
-  const pageContent = errorPage("Página no encontrada");
+  const pageContent = errorPage({ message: "Página no encontrada" });
 
-  res.status(404).send(pageLayout("Error: Página no encontrada", pageContent));
+  res
+    .status(404)
+    .send(
+      pageLayout({ title: "Error: Página no encontrada", content: pageContent })
+    );
 });
 
 app.listen(3000, () => {
