@@ -41,13 +41,31 @@ app.get("/", (req, res) => {
 // Esta página muestra los resultados de la búsqueda
 app.get("/search", (req, res) => {
   const { query } = req.query;
-  if (query.length < 3)
-    throw new Error("La cadena de búsqueda debe tener más de 2 caracteres");
+  if (query.length < 2)
+    throw new Error("La cadena de búsqueda debe tener más de 1 caracteres");
 
-  const pageContent = searchResults();
+  const matchedPokemon = pokedex.filter((pokemon) => {
+    return pokemon.name.english.toLowerCase().includes(query.toLowerCase());
+  });
+
+  const pageContent = searchResults(matchedPokemon);
   res
     .status(200)
     .send(pageLayout(`Resultados de la búsqueda: ${query}`, pageContent));
+});
+
+// --------
+// Está página muestra la ficha del pokemon
+app.get("/pokemon/:id", (req, res) => {
+  const id = req.params.id;
+
+  const [pokemon] = pokedex.filter((pokemon) => pokemon.id === Number(id));
+
+  if (!pokemon) {
+    const error = new Error("Pokémon no encontrado");
+    error.code = 404;
+    throw error;
+  }
 });
 
 // --------
@@ -55,7 +73,9 @@ app.get("/search", (req, res) => {
 app.use((error, req, res, next) => {
   const pageContent = errorPage(error.message);
 
-  res.status(500).send(pageLayout(`Error: ${error.message}`, pageContent));
+  res
+    .status(error.code || 500)
+    .send(pageLayout(`Error: ${error.message}`, pageContent));
 });
 
 // --------

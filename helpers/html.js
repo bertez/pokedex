@@ -37,9 +37,24 @@ function frontPage() {
 }
 
 function searchResults(results) {
+  if (results.length === 0) return errorPage("No results");
+
+  const htmlResults = results.map((result) => {
+    const { english, japanese } = result.name;
+
+    return `<li>
+              <a href="/pokemon/${result.id}">
+                ${english} / ${japanese}
+              </a>
+              (${result.type.join(", ")})
+            </li>`;
+  });
+
   return `
   <section>
-   aquí debería haber un ul con los resultados con links a la ficha...
+   <ul>
+    ${htmlResults.join("")}
+   </ul>
   </section>
   `;
 }
