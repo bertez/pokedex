@@ -109,7 +109,8 @@ function errorPage({ message }) {
 function imagePath({ id, suffix = "", extension = "png" }) {
   // uso padStart para añadir ceros al principio de id:
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
-  return `/${`${id}`.padStart(3, 0)}${suffix}.${extension}`;
+  const paddedId = String(id).padStart(3, 0);
+  return `/${paddedId}${suffix}.${extension}`;
 }
 
 module.exports = {
