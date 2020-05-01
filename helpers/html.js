@@ -107,16 +107,9 @@ function errorPage({ message }) {
 }
 
 function imagePath({ id, suffix = "", extension = "png" }) {
-  let imageName;
-
-  if (id < 10) {
-    imageName = `00${id}`;
-  } else if (id < 100) {
-    imageName = `0${id}`;
-  } else {
-    imageName = id;
-  }
-  return `/${imageName}${suffix}.${extension}`;
+  // uso padStart para añadir ceros al principio de id:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+  return `/${`${id}`.padStart(3, 0)}${suffix}.${extension}`;
 }
 
 module.exports = {
