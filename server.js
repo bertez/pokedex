@@ -44,9 +44,13 @@ app.get("/", (req, res) => {
 // Esta página muestra los resultados de la búsqueda
 app.get("/search", (req, res) => {
   const { query } = req.query;
-  if (query.length < 2)
-    throw new Error("La cadena de búsqueda debe tener más de 1 caracteres");
-
+  
+  if (query.length < 2) {
+    const error = new Error("La cadena de búsqueda debe tener más de 1 caracteres");
+    error.code = 400;
+    throw error;
+  }
+  
   const matchedPokemon = pokedex.filter((pokemon) => {
     return pokemon.name.english.toLowerCase().includes(query.toLowerCase());
   });
